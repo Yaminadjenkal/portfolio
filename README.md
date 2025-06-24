@@ -12,7 +12,6 @@ A simple and scalable web application for booking professional services online. 
 
 ## 📁 Project Structure
 
-
 ## 🧪 API Endpoints
 
 ### Internal API
@@ -33,6 +32,6 @@ A simple and scalable web application for booking professional services online. 
 ## 👩‍💻 Setup
 
 1. Clone the repo:
+
    ```bash
    git clone https://github.com/your-username/booking-app.git
-
