@@ -1,12 +1,13 @@
 {
-  "appointments": [
-    {
-      "name": "Yamina",
-      "email": "guest@example.com",
-      "service": "Manicure",
-      "date": "2025-07-04",
-      "time": "14:00"
-    }
-  ],
-  "guests": []
-}
+    "appointments": [
+      {
+        "name": "Yamina",
+        "email": "test@example.com",
+        "service": "Manicure",
+        "date": "2025-07-04",
+        "time": "10:00"
+      }
+    ],
+    "guests": []
+  }
+  

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil – Beauty Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px;">
+    <!-- Gauche -->
+    <div style="text-align: left;">
+      <h3 style="margin: 0;">Nail & Eyelash Studio</h3>
+      <img src="images/logo.jpg" alt="Logo Studio" style="max-width: 100px; margin-top: 8px;">
+    </div>
+
+    <!-- Centre -->
+    <div style="text-align: center; flex: 1;">
+      <h1 style="font-size: 32px; margin: 0;">Beautiful Nails and Lashes</h1>
+      <p style="margin-top: 8px;">Book your appointment today !</p>
+      <a href="booking.html">
+        <button style="margin-top: 10px; background-color: pink; border: none; padding: 10px 20px; font-size: 14px; cursor: pointer;">
+          Book Now
+        </button>
+      </a>
+    </div>
+
+    <!-- Espace vide à droite -->
+    <div style="width: 100px;"></div>
+  </header>
+
+  <!-- Section Services -->
+  <main style="padding: 40px; text-align: center;">
+    <h2>Our Service</h2>
+
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 30px;">
+
+      <!-- Manicure -->
+      <div style="max-width: 300px;">
+        <img src="manicure.jpg" alt="Manicure" style="width: 100%; height: auto;">
+        <h3><strong>Manicure</strong></h3>
+        <p>Treat yourself to a chic and timeless manicure – classic, gel and more – beauty at your fingertips</p>
+        <p><em>Starting at 25 €</em></p>
+        <a href="booking.html?service=Manicure">
+          <button style="background-color: pink; border: none; padding: 8px 16px; cursor: pointer;">Book Now</button>
+        </a>
+      </div>
+
+      <!-- Eyelash Extensions -->
+      <div style="max-width: 300px;">
+        <img src="eyelash.jpg" alt="Eyelash Extensions" style="width: 100%; height: auto;">
+        <h3><strong>Eyelash Extensions</strong></h3>
+        <p>Enhance your natural beauty, relax and wake up flawless</p>
+        <p><em>Starting at 50 €</em></p>
+        <a href="booking.html?service=Eyelash%20Extensions">
+          <button style="background-color: pink; border: none; padding: 8px 16px; cursor: pointer;">Book Now</button>
+        </a>
+      </div>
+
+      <!-- Pedicure -->
+      <div style="max-width: 300px;">
+        <img src="pedicure.jpg" alt="Pedicure" style="width: 100%; height: auto;">
+        <h3><strong>Pedicure</strong></h3>
+        <p>Relax and enjoy a gentle, elegant treatment – soft feet and perfect finish</p>
+        <p><em>Starting at 35 €</em></p>
+        <a href="booking.html?service=Pedicure">
+          <button style="background-color: pink; border: none; padding: 8px 16px; cursor: pointer;">Book Now</button>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

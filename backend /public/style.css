@@ -1,0 +1,98 @@
+/* Structure globale */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fdfdfd;
+    color: #333;
+  }
+  
+  /* Header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 40px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  header h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #444;
+  }
+  
+  header img {
+    max-width: 100px;
+    height: auto;
+  }
+  
+  header h1 {
+    text-align: center;
+    font-size: 32px;
+    color: #222;
+    margin: 0;
+  }
+  
+  header p {
+    text-align: center;
+    margin: 5px 0;
+    color: #777;
+  }
+  
+  header button {
+    background-color: #f8b9d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  header button:hover {
+    background-color: #f39ac0;
+  }
+  
+  /* Services */
+  main {
+    padding: 40px 20px;
+  }
+  
+  main h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #4a148c;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  .container div {
+    width: 300px;
+    text-align: center;
+  }
+  
+  .container img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  
+  .container h3 {
+    margin-top: 15px;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .container p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
