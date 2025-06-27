@@ -96,3 +96,34 @@ body {
     color: #555;
   }
   
+  .service-img {
+    width: 180px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .book-button {
+    background-color: pink;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .zoomable {
+    width: 180px;
+    height: 140px;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+  }
+  
+  .zoomable.zoomed {
+    transform: scale(2);
+    z-index: 10;
+    cursor: zoom-out;
+  }
+    

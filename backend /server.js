@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer'); // 📩 nodemailer pour envoi d'email
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -40,8 +41,8 @@ app.post('/api/guest-login', (req, res) => {
   res.status(200).send('Guest login successful');
 });
 
-// 📅 Créer rendez-vous
-app.post('/api/book', (req, res) => {
+// 📅 Créer rendez-vous + ✉️ envoyer email
+app.post('/api/book', async (req, res) => {
   const { name, email, service, date, time } = req.body;
   if (!name || !email || !service || !date || !time) {
     return res.status(400).send('Missing fields');
@@ -57,7 +58,38 @@ app.post('/api/book', (req, res) => {
 
   db.appointments.push({ name, email, service, date, time });
   writeDB(db);
-  res.status(200).send('Appointment confirmed');
+
+  // ✉️ Config Gmail avec mot de passe d'application
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'djenkalyamina72@gmail.com',
+      pass: 'glbd uybz jouj oqzb'
+    }
+  });
+
+  const message = {
+    from: 'djenkalyamina72@gmail.com',
+    to: email,
+    subject: '🎀 Confirmation de réservation – Beauty Studio',
+    text: `Bonjour ${name},
+
+Merci pour votre réservation pour un ${service} le ${date} à ${time}.
+
+Nous sommes impatients de vous accueillir 💅✨
+
+À bientôt,
+Beauty Studio`
+  };
+
+  try {
+    await transporter.sendMail(message);
+    console.log('📤 Email envoyé à', email);
+  } catch (error) {
+    console.error('❌ Erreur email :', error);
+  }
+
+  res.status(200).send('Appointment confirmed and email sent');
 });
 
 // 📖 Lire rendez-vous
@@ -133,16 +165,27 @@ app.delete('/api/book/:email/:date/:time', (req, res) => {
   res.status(200).send('Appointment deleted');
 });
 
-// 🔬 Test de route PUT
+// 📊 Route admin – toutes les réservations
+app.get('/api/admin/bookings', (req, res) => {
+  const db = readDB();
+  res.json(db.appointments);
+});
+
+// 🔬 Route de test PUT
 app.put('/debug', (req, res) => {
   console.log('✅ Route PUT test atteinte');
   res.send('PUT reçue');
 });
 
-// 🌍 Servir les fichiers statiques (comme update.html)
+// 🌍 Fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 🚀 Lancer le serveur
+// 🔗 Page d’accueil
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// 🚀 Lancer serveur
 app.listen(port, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${port}`);
 });

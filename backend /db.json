@@ -1,13 +1,26 @@
 {
-    "appointments": [
-      {
-        "name": "Yamina",
-        "email": "test@example.com",
-        "service": "Manicure",
-        "date": "2025-07-04",
-        "time": "10:00"
-      }
-    ],
-    "guests": []
-  }
-  
+  "appointments": [
+    {
+      "name": "Yamina",
+      "email": "test@example.com",
+      "service": "Manicure",
+      "date": "2025-07-04",
+      "time": "10:00"
+    },
+    {
+      "name": "yamina",
+      "email": "mina20101951@hotmail.com",
+      "service": "Pedicure",
+      "date": "2025-12-12",
+      "time": "10:00"
+    },
+    {
+      "name": "yamina",
+      "email": "mina20101951@hotmail.com",
+      "service": "Eyelash Extensions",
+      "date": "2025-08-12",
+      "time": "10:50"
+    }
+  ],
+  "guests": []
+}
