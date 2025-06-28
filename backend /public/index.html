@@ -66,6 +66,23 @@
     </div>
   </main>
 
-</body>
-</html>
+  <!-- ✅ Bouton admin tout en haut à droite -->
+<div id="admin-section" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
+  <input type="password" id="admin-code" placeholder="Code admin" 
+         style="padding: 6px 8px; border-radius: 5px; border: 1px solid #ccc;">
+  <button onclick="verifierCodeAdmin()" 
+          style="padding: 7px 12px; margin-left: 8px; background-color: #c2185b; color: white; border: none; border-radius: 5px;">
+    Je suis admin
+  </button>
+</div>
 
+<script>
+  function verifierCodeAdmin() {
+    const code = document.getElementById('admin-code').value.trim();
+    if (code === 'beauty123') {
+      window.location.href = '/admin/dashboard';
+    } else {
+      alert("Code incorrect !");
+    }
+  }
+</script>

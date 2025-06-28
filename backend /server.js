@@ -185,6 +185,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// 🔐 Route dashboard admin
+app.get('/admin/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 // 🚀 Lancer serveur
 app.listen(port, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${port}`);
