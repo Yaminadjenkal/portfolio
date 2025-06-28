@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard – Réservations</title>
+  <title>Tableau de bord – Réservations Beauty Studio</title>
   <style>
     body {
       font-family: sans-serif;
@@ -11,6 +11,7 @@
     }
     h1 {
       color: #e91e63;
+      margin-bottom: 1rem;
     }
     table {
       width: 100%;
@@ -26,39 +27,64 @@
       background-color: #fce4ec;
       color: #c2185b;
     }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .no-data {
+      text-align: center;
+      color: #888;
+      margin-top: 2rem;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
   <h1>📋 Réservations reçues</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Service</th>
-        <th>Date</th>
-        <th>Heure</th>
-      </tr>
-    </thead>
-    <tbody id="data"></tbody>
-  </table>
+  <div id="table-container">
+    <table id="booking-table" style="display: none;">
+      <thead>
+        <tr>
+          <th scope="col">Nom</th>
+          <th scope="col">Email</th>
+          <th scope="col">Service</th>
+          <th scope="col">Date</th>
+          <th scope="col">Heure</th>
+        </tr>
+      </thead>
+      <tbody id="data"></tbody>
+    </table>
+    <div class="no-data" id="no-data-msg" style="display: none;">Aucune réservation enregistrée pour le moment.</div>
+  </div>
 
   <script>
     fetch('/api/admin/bookings')
       .then(res => res.json())
       .then(data => {
         const tbody = document.getElementById('data');
-        data.forEach(r => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${r.name}</td>
-            <td>${r.email}</td>
-            <td>${r.service}</td>
-            <td>${r.date}</td>
-            <td>${r.time}</td>
-          `;
-          tbody.appendChild(row);
-        });
+        const table = document.getElementById('booking-table');
+        const msg = document.getElementById('no-data-msg');
+
+        if (data.length === 0) {
+          msg.style.display = 'block';
+        } else {
+          table.style.display = 'table';
+          data.forEach(r => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${r.name}</td>
+              <td>${r.email}</td>
+              <td>${r.service}</td>
+              <td>${r.date}</td>
+              <td>${r.time}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+      })
+      .catch(err => {
+        document.getElementById('no-data-msg').textContent = 'Erreur lors du chargement des données.';
+        document.getElementById('no-data-msg').style.display = 'block';
+        console.error('Erreur chargement réservations :', err);
       });
   </script>
 </body>

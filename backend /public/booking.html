@@ -2,8 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Réserver un service</title>
+  <title>Réserver un service – Beauty Studio</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    .submit-button {
+      background-color: #f48fb1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .submit-button:hover {
+      background-color: #ec407a;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
@@ -14,43 +44,39 @@
 
   <main style="max-width: 500px; margin: auto;">
     <form id="bookingForm">
-      <label>Nom :
+      <label for="name">Nom :
         <input type="text" id="name" required>
-      </label><br><br>
+      </label>
 
-      <label>Email :
+      <label for="email">Email :
         <input type="email" id="email" required>
-      </label><br><br>
+      </label>
 
-      <label>Service :
+      <label for="service">Service :
         <input type="text" id="service" required readonly>
-      </label><br><br>
+      </label>
 
-      <label>Date :
+      <label for="date">Date :
         <input type="date" id="date" required>
-      </label><br><br>
+      </label>
 
-      <label>Heure :
+      <label for="time">Heure :
         <input type="time" id="time" required>
-      </label><br><br>
+      </label>
 
-      <button type="submit" style="background-color: pink; border: none; padding: 10px 20px; cursor: pointer;">
-        Confirmer la réservation
-      </button>
+      <button type="submit" class="submit-button">Confirmer la réservation</button>
     </form>
 
-    <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+    <div id="result"></div>
   </main>
 
   <script>
-    // Pré-remplir le champ "Service" depuis l'URL
     const params = new URLSearchParams(window.location.search);
     const serviceName = params.get("service");
     if (serviceName) {
       document.getElementById("service").value = decodeURIComponent(serviceName);
     }
 
-    // Envoi de la réservation
     document.getElementById("bookingForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -70,11 +96,13 @@
         });
 
         const text = await res.text();
-        document.getElementById("result").textContent = `${res.status} — ${text}`;
-        document.getElementById("result").style.color = res.ok ? "green" : "red";
+        const resultDiv = document.getElementById("result");
+        resultDiv.textContent = `${res.status} — ${text}`;
+        resultDiv.style.color = res.ok ? "green" : "red";
       } catch (err) {
-        document.getElementById("result").textContent = "Erreur : " + err.message;
-        document.getElementById("result").style.color = "red";
+        const resultDiv = document.getElementById("result");
+        resultDiv.textContent = "Erreur : " + err.message;
+        resultDiv.style.color = "red";
       }
     });
   </script>
