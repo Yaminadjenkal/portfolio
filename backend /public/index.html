@@ -7,82 +7,164 @@
 </head>
 <body>
 
+  <!-- ✅ Bouton admin en haut à droite -->
+  <div id="admin-section" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
+    <input type="password" id="admin-code" placeholder="Code admin" 
+           style="padding: 6px 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <button onclick="verifierCodeAdmin()" 
+            style="padding: 7px 12px; margin-left: 8px; background-color: #c2185b; color: white; border: none; border-radius: 5px;">
+      Je suis admin
+    </button>
+  </div>
+
   <!-- En-tête -->
   <header style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px;">
-    <!-- Gauche -->
     <div style="text-align: left;">
       <h3 style="margin: 0;">Studio Ongles & Cils</h3>
       <img src="images/2F7425D7-2C7D-4C7B-A707-00CDE4810E42.png" alt="Logo Studio" style="max-width: 100px; margin-top: 8px;">
     </div>
-
-    <!-- Centre -->
     <div style="text-align: center; flex: 1;">
       <h1 style="font-size: 32px; margin: 0;">Des ongles et cils sublimes</h1>
       <p style="margin-top: 8px;">Prenez rendez-vous dès aujourd’hui !</p>
     </div>
-
     <div style="width: 100px;"></div>
   </header>
 
-  <!-- Section Services -->
+  <!-- Prestations -->
   <main style="padding: 40px; text-align: center;">
     <h2>Nos Prestations</h2>
-
     <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 30px;">
-
-      <!-- Manucure -->
-      <div style="width: 200px; text-align: center;">
+      <div style="width: 200px;">
         <img src="images/Copilot_20250616_231053.png" alt="Manucure" class="service-img">
         <h3><strong>Manucure</strong></h3>
-        <p>Offrez-vous une manucure chic et intemporelle – classique, gel et plus encore – la beauté au bout des doigts</p>
+        <p>Manucure chic et intemporelle – classique, gel, etc.</p>
         <p><em>À partir de 25 €</em></p>
-        <a href="booking.html?service=Manucure">
-          <button class="book-button">Réserver</button>
-        </a>
+        <a href="booking.html?service=Manucure"><button class="book-button">Réserver</button></a>
       </div>
-
-      <!-- Extensions de cils -->
-      <div style="width: 200px; text-align: center;">
-        <img src="images/Copilot_20250612_230729.png" alt="Extensions de cils" class="service-img">
+      <div style="width: 200px;">
+        <img src="images/Copilot_20250612_230729.png" alt="Cils" class="service-img">
         <h3><strong>Extensions de cils</strong></h3>
-        <p>Sublimez votre beauté naturelle, détendez-vous et réveillez-vous parfaite</p>
+        <p>Sublimez votre regard tout en douceur</p>
         <p><em>À partir de 50 €</em></p>
-        <a href="booking.html?service=Extensions%20de%20cils">
-          <button class="book-button">Réserver</button>
-        </a>
+        <a href="booking.html?service=Extensions%20de%20cils"><button class="book-button">Réserver</button></a>
       </div>
-
-      <!-- Pédicure -->
-      <div style="width: 200px; text-align: center;">
+      <div style="width: 200px;">
         <img src="images/Copilot_20250614_115412.png" alt="Pédicure" class="service-img">
         <h3><strong>Pédicure</strong></h3>
-        <p>Détendez-vous avec un soin doux et élégant – des pieds doux et une finition parfaite</p>
+        <p>Pieds doux, soin relaxant et finition élégante</p>
         <p><em>À partir de 35 €</em></p>
-        <a href="booking.html?service=Pédicure">
-          <button class="book-button">Réserver</button>
-        </a>
+        <a href="booking.html?service=Pédicure"><button class="book-button">Réserver</button></a>
       </div>
-
     </div>
   </main>
 
-  <!-- ✅ Bouton admin tout en haut à droite -->
-<div id="admin-section" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
-  <input type="password" id="admin-code" placeholder="Code admin" 
-         style="padding: 6px 8px; border-radius: 5px; border: 1px solid #ccc;">
-  <button onclick="verifierCodeAdmin()" 
-          style="padding: 7px 12px; margin-left: 8px; background-color: #c2185b; color: white; border: none; border-radius: 5px;">
-    Je suis admin
-  </button>
-</div>
+  <!-- Galerie -->
+  <section style="padding: 40px; text-align: center;">
+    <h2>Galerie</h2>
+    <div style="position: relative; max-width: 700px; margin: auto; overflow: hidden; border-radius: 10px;">
+      <div id="carousel" style="display: flex; transition: transform 0.5s ease;">
+        <img src="images/photo1.jpg" alt="Travail 1" style="min-width: 100%; border-radius: 10px;">
+        <img src="images/photo2.jpg" alt="Travail 2" style="min-width: 100%; border-radius: 10px;">
+        <img src="images/photo3.jpg" alt="Travail 3" style="min-width: 100%; border-radius: 10px;">
+      </div>
+      <button onclick="slide(-1)" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);
+        background: rgba(0,0,0,0.4); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer;">❮</button>
+      <button onclick="slide(1)" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+        background: rgba(0,0,0,0.4); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer;">❯</button>
+    </div>
+  </section>
 
-<script>
-  function verifierCodeAdmin() {
-    const code = document.getElementById('admin-code').value.trim();
-    if (code === 'beauty123') {
-      window.location.href = '/admin/dashboard';
-    } else {
-      alert("Code incorrect !");
+   <!-- Avis clients -->
+   <section style="padding: 40px; background-color: #fffafc;">
+    <h2 style="text-align: center;">Ce que disent nos clientes</h2>
+    <div id="avis-container" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 20px;"></div>
+  </section>
+
+  <!-- Formulaire d’avis -->
+  <section style="padding: 40px; background-color: #fff8f9;">
+    <h2>💬 Laissez votre avis</h2>
+    <form id="review-form" style="max-width: 500px; margin: auto;">
+      <input type="text" name="name" placeholder="Votre prénom" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+      <label for="note">Note :</label>
+      <select name="note" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+        <option value="">Sélectionnez une note</option>
+        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+        <option value="4">⭐️⭐️⭐️⭐️</option>
+        <option value="3">⭐️⭐️⭐️</option>
+        <option value="2">⭐️⭐️</option>
+        <option value="1">⭐️</option>
+      </select>
+      <textarea name="comment" placeholder="Votre avis..." required style="width: 100%; padding: 10px; margin-bottom: 10px;"></textarea>
+      <button type="submit" style="background-color: #c2185b; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Envoyer</button>
+    </form>
+    <p id="review-msg" style="text-align: center; margin-top: 15px;"></p>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    function verifierCodeAdmin() {
+      const code = document.getElementById('admin-code').value.trim();
+      if (code === 'beauty123') {
+        window.location.href = '/admin/dashboard';
+      } else {
+        alert("Code incorrect !");
+      }
     }
-  }
-</script>
+
+    // 🔁 Charger les avis
+    fetch('/api/reviews')
+      .then(res => res.json())
+      .then(avis => {
+        const container = document.getElementById('avis-container');
+        if (avis.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color: #888;">Aucun avis pour le moment.</p>';
+        } else {
+          avis.slice().reverse().forEach(a => {
+            const card = document.createElement('div');
+            card.style = "width:300px; background:#fce4ec; padding:20px; border-radius:10px;";
+            card.innerHTML = `
+              <p>💬 "${a.comment}"</p>
+              <p style="margin:5px 0;">${"⭐️".repeat(Number(a.note) || 0)}</p>
+              <p style="text-align:right;">– ${a.name}</p>
+            `;
+            container.appendChild(card);
+          });
+        }
+      });
+
+    // ✅ Envoi du formulaire d’avis
+    document.getElementById('review-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        note: form.note.value,
+        comment: form.comment.value
+      };
+
+      fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        document.getElementById('review-msg').textContent = msg;
+        form.reset();
+      })
+      .catch(() => {
+        document.getElementById('review-msg').textContent = "❌ Une erreur est survenue.";
+      });
+    });
+
+    // 🎯 Script du carrousel d’images
+    let currentIndex = 0;
+    function slide(direction) {
+      const carousel = document.getElementById('carousel');
+      const total = carousel.children.length;
+      currentIndex = (currentIndex + direction + total) % total;
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+  </script>
+</body>
+</html>

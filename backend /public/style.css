@@ -31,7 +31,7 @@ header img {
 header h1 {
   text-align: center;
   font-size: 32px;
-  color: #c2185b;
+  color: #000000;
   margin: 0;
 }
 
@@ -64,7 +64,7 @@ main {
 main h2 {
   text-align: center;
   font-size: 28px;
-  color: #880e4f;
+  color: #000000;
 }
 
 /* Cartes de prestations */
