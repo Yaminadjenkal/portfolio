@@ -1,14 +1,30 @@
+require('dotenv').config();
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const dbPath = path.join(__dirname, 'db.json');
-const reviewsPath = path.join(__dirname, 'reviews.json');
 
-// 💡 Middlewares
+// Connexion MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connecté'))
+  .catch(err => {
+    console.error('❌ Erreur MongoDB', err.message);
+    process.exit(1);
+  });
+
+// Schémas Mongoose
+const Guest = mongoose.model('Guest', new mongoose.Schema({ email: { type: String, required: true, unique: true } }));
+const Appointment = mongoose.model('Appointment', new mongoose.Schema({
+  name: String, email: String, service: String, date: String, time: String
+}));
+const Review = mongoose.model('Review', new mongoose.Schema({
+  name: String, comment: String, note: Number, date: { type: Date, default: Date.now }
+}));
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -16,57 +32,35 @@ app.use((req, res, next) => {
   next();
 });
 
-// 📚 Lecture / écriture DB
-function readDB() {
-  return JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
-}
-function writeDB(data) {
-  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
-}
-function readReviews() {
-  return fs.existsSync(reviewsPath) ? JSON.parse(fs.readFileSync(reviewsPath, 'utf-8')) : [];
-}
-function writeReviews(data) {
-  fs.writeFileSync(reviewsPath, JSON.stringify(data, null, 2));
-}
-
-// 👤 Connexion invité
-app.post('/api/guest-login', (req, res) => {
+// 🔐 Guest login
+app.post('/api/guest-login', async (req, res) => {
   const { email } = req.body;
   if (!email || !email.includes('@')) return res.status(400).send('Invalid email');
 
-  const db = readDB();
-  if (!db.guests.find(g => g.email === email)) {
-    db.guests.push({ email });
-    writeDB(db);
-  }
-  res.status(200).send('Guest login successful');
+  await Guest.updateOne({ email }, {}, { upsert: true });
+  res.send('Guest login successful');
 });
 
-// 📅 Créer rdv + ✉️ email
+// 📅 Créer rdv + ✉️ confirmation
 app.post('/api/book', async (req, res) => {
   const { name, email, service, date, time } = req.body;
-  if (!name || !email || !service || !date || !time)
-    return res.status(400).send('Missing fields');
+  if (!name || !email || !service || !date || !time) return res.status(400).send('Champs manquants');
 
-  const db = readDB();
-  const conflict = db.appointments.find(a => a.date === date && a.time === time);
-  if (conflict) return res.status(409).send('Time slot already booked');
+  const conflict = await Appointment.findOne({ date, time });
+  if (conflict) return res.status(409).send('Créneau déjà réservé');
 
-  db.appointments.push({ name, email, service, date, time });
-  writeDB(db);
+  await Appointment.create({ name, email, service, date, time });
 
-  // ✉️ Envoyer mail
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'djenkalyamina72@gmail.com',
-      pass: 'glbd uybz jouj oqzb' // 🔐 à sécuriser côté env
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
   const message = {
-    from: 'djenkalyamina72@gmail.com',
+    from: process.env.EMAIL_USER,
     to: email,
     subject: '🎀 Confirmation de réservation – Beauty Studio',
     text: `Bonjour ${name},\n\nMerci pour votre réservation pour un ${service} le ${date} à ${time}.\n\nÀ bientôt,\nBeauty Studio`
@@ -75,114 +69,80 @@ app.post('/api/book', async (req, res) => {
   try {
     await transporter.sendMail(message);
     console.log('📤 Email envoyé à', email);
-  } catch (error) {
-    console.error('❌ Erreur email :', error);
+  } catch (e) {
+    console.error('❌ Erreur envoi mail', e);
   }
 
-  res.status(200).send('Appointment confirmed and email sent');
+  res.send('Rendez-vous confirmé et email envoyé');
 });
 
-// 📖 Lire rdv
-app.get('/api/book', (req, res) => {
-  const db = readDB();
+// 📖 Lire les rdvs (tous ou par date)
+app.get('/api/book', async (req, res) => {
   const { date } = req.query;
-  if (date) {
-    const filtered = db.appointments.filter(r => r.date === date);
-    return res.status(200).json(filtered);
-  }
-  res.status(200).json(db.appointments);
+  const rdvs = date
+    ? await Appointment.find({ date })
+    : await Appointment.find();
+  res.json(rdvs);
 });
 
-// 🔁 Modifier rdv
-app.put('/api/book/:email/:date/:time', (req, res) => {
+// 🔁 Modifier un rdv
+app.put('/api/book/:email/:date/:time', async (req, res) => {
   const { email, date, time } = req.params;
   const { name, email: newEmail, service, newDate, newTime } = req.body;
-  if (!name || !newEmail || !service || !newDate || !newTime)
-    return res.status(400).send('Missing fields');
 
-  const db = readDB();
-  const index = db.appointments.findIndex(
-    r => r.email === email && r.date === date && r.time === time
-  );
-  if (index === -1) return res.status(404).send('Appointment not found');
+  const rdv = await Appointment.findOne({ email, date, time });
+  if (!rdv) return res.status(404).send('Rendez-vous introuvable');
 
-  const conflict = db.appointments.find(
-    r => r.date === newDate && r.time === newTime &&
-         !(r.email === email && r.date === date && r.time === time)
-  );
-  if (conflict) return res.status(409).send('New time slot already booked');
-
-  db.appointments[index] = {
-    name,
-    email: newEmail,
-    service,
+  const conflict = await Appointment.findOne({
     date: newDate,
-    time: newTime
-  };
-  writeDB(db);
-  res.status(200).send('Appointment updated');
+    time: newTime,
+    _id: { $ne: rdv._id }
+  });
+  if (conflict) return res.status(409).send('Nouveau créneau déjà pris');
+
+  Object.assign(rdv, {
+    name, email: newEmail, service, date: newDate, time: newTime
+  });
+  await rdv.save();
+  res.send('Rendez-vous modifié');
 });
 
 // 🗑️ Supprimer rdv
-app.delete('/api/book/:email/:date/:time', (req, res) => {
+app.delete('/api/book/:email/:date/:time', async (req, res) => {
   const { email, date, time } = req.params;
-  const db = readDB();
-  const initialLength = db.appointments.length;
-
-  db.appointments = db.appointments.filter(
-    a => !(a.email === email && a.date === date && a.time === time)
-  );
-
-  if (db.appointments.length === initialLength)
-    return res.status(404).send('Appointment not found');
-
-  writeDB(db);
-  res.status(200).send('Appointment deleted');
+  const result = await Appointment.deleteOne({ email, date, time });
+  result.deletedCount
+    ? res.send('Rendez-vous supprimé')
+    : res.status(404).send('Non trouvé');
 });
 
-// 📊 Toutes les réservations admin
-app.get('/api/admin/bookings', (req, res) => {
-  const db = readDB();
-  res.json(db.appointments);
+// 📊 Rdvs admin
+app.get('/api/admin/bookings', async (req, res) => {
+  const all = await Appointment.find();
+  res.json(all);
 });
 
-// ✍️ Enregistrement d’un avis
-app.post('/api/reviews', (req, res) => {
+// ✍️ Enregistrer un avis
+app.post('/api/reviews', async (req, res) => {
   const { name, comment, note } = req.body;
   if (!name || !comment || !note) return res.status(400).send("Champs manquants");
 
-  const reviews = readReviews();
-  reviews.push({ name, comment, note, date: new Date().toISOString() });
-  writeReviews(reviews);
+  await Review.create({ name, comment, note });
   res.send("Merci pour votre avis 💖");
 });
 
 // 📥 Lire les avis
-app.get('/api/reviews', (req, res) => {
-  const reviews = readReviews();
+app.get('/api/reviews', async (req, res) => {
+  const reviews = await Review.find().sort({ date: -1 });
   res.json(reviews);
 });
 
-// 🔬 Test PUT
-app.put('/debug', (req, res) => {
-  console.log('✅ Route PUT test atteinte');
-  res.send('PUT reçue');
-});
-
-// 🌍 Fichiers statiques
+// 🌍 Fichiers statiques + accueil
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/admin/dashboard', (_, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 
-// Accueil
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// 🔐 Dashboard admin
-app.get('/admin/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-// 🚀 Lancer serveur
+// 🚀 Lancement
 app.listen(port, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${port}`);
 });
