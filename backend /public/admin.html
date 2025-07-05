@@ -36,6 +36,74 @@
       margin-top: 2rem;
       font-style: italic;
     }
+    button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background-color: #ffca28;
+    }
+    .delete-btn {
+      background-color: #e57373;
+      color: white;
+    }
+
+    /* Modale */
+    #editModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      width: 300px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+    #editModal h3 {
+      margin-top: 0;
+      color: #c2185b;
+    }
+    #editModal input {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #editModal button {
+      margin-right: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #editModal button:first-of-type {
+      background-color: #4caf50;
+      color: white;
+    }
+    #editModal button:last-of-type {
+      background-color: #e0e0e0;
+    }
+
+    /* Toast */
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+    }
   </style>
 </head>
 <body>
@@ -44,11 +112,12 @@
     <table id="booking-table" style="display: none;">
       <thead>
         <tr>
-          <th scope="col">Nom</th>
-          <th scope="col">Email</th>
-          <th scope="col">Service</th>
-          <th scope="col">Date</th>
-          <th scope="col">Heure</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Service</th>
+          <th>Date</th>
+          <th>Heure</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="data"></tbody>
@@ -56,7 +125,82 @@
     <div class="no-data" id="no-data-msg" style="display: none;">Aucune réservation enregistrée pour le moment.</div>
   </div>
 
+  <!-- Modale d'édition -->
+  <div id="editModal">
+    <h3>Modifier le rendez-vous</h3>
+    <input id="editName" placeholder="Nom">
+    <input id="editEmail" placeholder="Email">
+    <input id="editService" placeholder="Service">
+    <input id="editDate" type="date">
+    <input id="editTime" type="time">
+    <button onclick="submitEdit()">Enregistrer</button>
+    <button onclick="closeModal()">Annuler</button>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast">✅ Action réussie</div>
+
   <script>
+    let currentEdit = {};
+
+    function showToast(message, color = '#4caf50') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.background = color;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    function deleteRdv(email, date, time) {
+      if (confirm("Supprimer ce rendez-vous ?")) {
+        fetch(`/api/book/${email}/${date}/${time}`, { method: 'DELETE' })
+          .then(res => {
+            if (!res.ok) throw new Error();
+            showToast("Rendez-vous supprimé", "#e57373");
+            setTimeout(() => location.reload(), 1000);
+          })
+          .catch(() => showToast("Erreur lors de la suppression", "#f44336"));
+      }
+    }
+
+    function editRdv(rdv) {
+      currentEdit = rdv;
+      document.getElementById('editName').value = rdv.name;
+      document.getElementById('editEmail').value = rdv.email;
+      document.getElementById('editService').value = rdv.service;
+      document.getElementById('editDate').value = rdv.date;
+      document.getElementById('editTime').value = rdv.time;
+      document.getElementById('editModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+
+    function submitEdit() {
+      const body = {
+        name: document.getElementById('editName').value,
+        email: document.getElementById('editEmail').value,
+        service: document.getElementById('editService').value,
+        newDate: document.getElementById('editDate').value,
+        newTime: document.getElementById('editTime').value
+      };
+
+      fetch(`/api/book/${currentEdit.email}/${currentEdit.date}/${currentEdit.time}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(res => {
+          if (!res.ok) throw new Error();
+          showToast("Rendez-vous modifié");
+          setTimeout(() => location.reload(), 1000);
+        })
+        .catch(() => showToast("Erreur lors de la modification", "#f44336"));
+    }
+
     fetch('/api/admin/bookings')
       .then(res => res.json())
       .then(data => {
@@ -76,6 +220,10 @@
               <td>${r.service}</td>
               <td>${r.date}</td>
               <td>${r.time}</td>
+              <td>
+                <button class="edit-btn" onclick='editRdv(${JSON.stringify(r)})'>✏️</button>
+                <button class="delete-btn" onclick="deleteRdv('${r.email}', '${r.date}', '${r.time}')">🗑️</button>
+              </td>
             `;
             tbody.appendChild(row);
           });
