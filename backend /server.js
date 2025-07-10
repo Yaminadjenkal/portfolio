@@ -73,7 +73,7 @@ app.post('/api/book', async (req, res) => {
     console.error('❌ Erreur envoi mail', e);
   }
 
-  res.send('Rendez-vous confirmé et email envoyé');
+  res.send('💖 Merci pour votre réservation !');
 });
 
 // 📖 Lire les rdvs (tous ou par date)

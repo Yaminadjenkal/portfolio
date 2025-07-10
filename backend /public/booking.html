@@ -97,7 +97,7 @@
 
         const text = await res.text();
         const resultDiv = document.getElementById("result");
-        resultDiv.textContent = `${res.status} — ${text}`;
+        resultDiv.textContent = text;
         resultDiv.style.color = res.ok ? "green" : "red";
       } catch (err) {
         const resultDiv = document.getElementById("result");
