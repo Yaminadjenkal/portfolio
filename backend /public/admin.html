@@ -2,114 +2,16 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Tableau de bord – Réservations Beauty Studio</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #fffafc;
-      padding: 2rem;
-    }
-    h1 {
-      color: #e91e63;
-      margin-bottom: 1rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background-color: #fce4ec;
-      color: #c2185b;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .no-data {
-      text-align: center;
-      color: #888;
-      margin-top: 2rem;
-      font-style: italic;
-    }
-    button {
-      margin-right: 5px;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .edit-btn {
-      background-color: #ffca28;
-    }
-    .delete-btn {
-      background-color: #e57373;
-      color: white;
-    }
-
-    /* Modale */
-    #editModal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      border-radius: 8px;
-      padding: 1.5rem;
-      width: 300px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-    #editModal h3 {
-      margin-top: 0;
-      color: #c2185b;
-    }
-    #editModal input {
-      margin-bottom: 10px;
-      padding: 8px;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    #editModal button {
-      margin-right: 10px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #editModal button:first-of-type {
-      background-color: #4caf50;
-      color: white;
-    }
-    #editModal button:last-of-type {
-      background-color: #e0e0e0;
-    }
-
-    /* Toast */
-    #toast {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #4caf50;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      z-index: 1001;
-    }
-  </style>
+  <title>Dashboard – Beauty Studio</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
-  <h1>📋 Réservations reçues</h1>
-  <div id="table-container">
-    <table id="booking-table" style="display: none;">
+
+  <div class="admin-container">
+    <h1 class="admin-title">Dashboard Admin</h1>
+
+    <table class="admin-table">
       <thead>
         <tr>
           <th>Nom</th>
@@ -117,123 +19,48 @@
           <th>Service</th>
           <th>Date</th>
           <th>Heure</th>
-          <th>Actions</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody id="data"></tbody>
+      <tbody id="booking-table"></tbody>
     </table>
-    <div class="no-data" id="no-data-msg" style="display: none;">Aucune réservation enregistrée pour le moment.</div>
-  </div>
 
-  <!-- Modale d'édition -->
-  <div id="editModal">
-    <h3>Modifier le rendez-vous</h3>
-    <input id="editName" placeholder="Nom">
-    <input id="editEmail" placeholder="Email">
-    <input id="editService" placeholder="Service">
-    <input id="editDate" type="date">
-    <input id="editTime" type="time">
-    <button onclick="submitEdit()">Enregistrer</button>
-    <button onclick="closeModal()">Annuler</button>
+    <a href="/" class="admin-return">Retour au site</a>
   </div>
-
-  <!-- Toast -->
-  <div id="toast">✅ Action réussie</div>
 
   <script>
-    let currentEdit = {};
+    async function loadBookings() {
+      const res = await fetch("/api/admin/bookings");
+      const bookings = await res.json();
 
-    function showToast(message, color = '#4caf50') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.background = color;
-      toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 3000);
-    }
+      const table = document.getElementById("booking-table");
+      table.innerHTML = "";
 
-    function deleteRdv(email, date, time) {
-      if (confirm("Supprimer ce rendez-vous ?")) {
-        fetch(`/api/book/${email}/${date}/${time}`, { method: 'DELETE' })
-          .then(res => {
-            if (!res.ok) throw new Error();
-            showToast("Rendez-vous supprimé", "#e57373");
-            setTimeout(() => location.reload(), 1000);
-          })
-          .catch(() => showToast("Erreur lors de la suppression", "#f44336"));
-      }
-    }
+      bookings.forEach(b => {
+        const row = document.createElement("tr");
 
-    function editRdv(rdv) {
-      currentEdit = rdv;
-      document.getElementById('editName').value = rdv.name;
-      document.getElementById('editEmail').value = rdv.email;
-      document.getElementById('editService').value = rdv.service;
-      document.getElementById('editDate').value = rdv.date;
-      document.getElementById('editTime').value = rdv.time;
-      document.getElementById('editModal').style.display = 'block';
-    }
+        row.innerHTML = `
+          <td>${b.name}</td>
+          <td>${b.email}</td>
+          <td>${b.service}</td>
+          <td>${b.date}</td>
+          <td>${b.time}</td>
+          <td><button class="delete-btn" onclick="deleteBooking('${b.id}')">Supprimer</button></td>
+        `;
 
-    function closeModal() {
-      document.getElementById('editModal').style.display = 'none';
-    }
-
-    function submitEdit() {
-      const body = {
-        name: document.getElementById('editName').value,
-        email: document.getElementById('editEmail').value,
-        service: document.getElementById('editService').value,
-        newDate: document.getElementById('editDate').value,
-        newTime: document.getElementById('editTime').value
-      };
-
-      fetch(`/api/book/${currentEdit.email}/${currentEdit.date}/${currentEdit.time}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-        .then(res => {
-          if (!res.ok) throw new Error();
-          showToast("Rendez-vous modifié");
-          setTimeout(() => location.reload(), 1000);
-        })
-        .catch(() => showToast("Erreur lors de la modification", "#f44336"));
-    }
-
-    fetch('/api/admin/bookings')
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.getElementById('data');
-        const table = document.getElementById('booking-table');
-        const msg = document.getElementById('no-data-msg');
-
-        if (data.length === 0) {
-          msg.style.display = 'block';
-        } else {
-          table.style.display = 'table';
-          data.forEach(r => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${r.name}</td>
-              <td>${r.email}</td>
-              <td>${r.service}</td>
-              <td>${r.date}</td>
-              <td>${r.time}</td>
-              <td>
-                <button class="edit-btn" onclick='editRdv(${JSON.stringify(r)})'>✏️</button>
-                <button class="delete-btn" onclick="deleteRdv('${r.email}', '${r.date}', '${r.time}')">🗑️</button>
-              </td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      })
-      .catch(err => {
-        document.getElementById('no-data-msg').textContent = 'Erreur lors du chargement des données.';
-        document.getElementById('no-data-msg').style.display = 'block';
-        console.error('Erreur chargement réservations :', err);
+        table.appendChild(row);
       });
+    }
+
+    async function deleteBooking(id) {
+      if (!confirm("Supprimer ce rendez-vous ?")) return;
+
+      await fetch("/api/admin/bookings/" + id, { method: "DELETE" });
+      loadBookings();
+    }
+
+    loadBookings();
   </script>
+
 </body>
 </html>
