@@ -2,171 +2,167 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Accueil – Beauty Studio</title>
+  <title>Beauty Studio – Accueil</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page">
 
-  <!-- ✅ Bouton admin en haut à droite -->
-  <div id="admin-section" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
-    <input type="password" id="admin-code" placeholder="Code admin" 
-           style="padding: 6px 8px; border-radius: 5px; border: 1px solid #ccc;">
-    <button onclick="verifierCodeAdmin()" 
-            style="padding: 7px 12px; margin-left: 8px; background-color: #c2185b; color: white; border: none; border-radius: 5px;">
-      Je suis admin
-    </button>
-  </div>
-
-  <!-- En-tête -->
-  <header style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px;">
-    <div style="text-align: left;">
-      <h3 style="margin: 0;">Beauty Studio</h3>
-      <img src="/images/Copilot_20250714_133821.png" alt="Logo Studio" style="max-width: 100px; margin-top: 8px;">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="/images/Copilot_20250714_133821.png" alt="Logo" class="brand-logo">
+        <div class="brand-name">Beauty Studio</div>
+      </div>
+      <div class="header-cta">
+        <a href="booking.html">Prendre rendez-vous</a>
+      </div>
     </div>
-    <div style="text-align: center; flex: 1;">
-      <h1 style="font-size: 32px; margin: 0;">Des ongles et cils sublimes</h1>
-      <p style="margin-top: 8px;">Prenez rendez-vous dès aujourd’hui !</p>
-    </div>
-    <div style="width: 100px;"></div>
   </header>
 
-  <!-- Prestations -->
-  <main style="padding: 40px; text-align: center;">
-    <h2>Nos Prestations</h2>   
-    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 30px;">
-      <div style="width: 200px;">
-        <img src="images/Copilot_20250616_231053.png" alt="Manucure" class="service-img">
-        <h3><strong>Manucure</strong></h3>
-        <p>Manucure chic et intemporelle </p>
-        <p><em>À partir de 25 €</em></p>
-        <a href="booking.html?service=Manucure"><button class="book-button">Réserver</button></a>
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+      <div>
+        <h1 class="hero-title">Ongles & cils d’exception</h1>
+        <p class="hero-subtitle">
+          Une expérience beauté inspirée des maisons de couture. Réservez votre moment privilégié.
+        </p>
+        <div class="hero-actions">
+          <a href="booking.html" class="btn-primary">Réserver</a>
+          <a href="#services" class="btn-ghost">Découvrir</a>
+        </div>
       </div>
-      <div style="background-color: #f7ecf2; width: 200px;">
-        <img src="images/Copilot_20250612_230729.png" alt="Cils" class="service-img">
-        <h3><strong>Extensions de cils</strong></h3>
-        <p>Sublimez votre regard tout en douceur</p>
-        <p><em>À partir de 50 €</em></p>
-        <a href="booking.html?service=Extensions%20de%20cils">
-          <button class="book-button">Réserver</button>
-        </a>
-      </div>          
-      <div style="width: 200px;">
-        <img src="images/Copilot_20250614_115412.png" alt="Pédicure" class="service-img">
-        <h3><strong>Pédicure</strong></h3>
-        <p>Pieds doux, soin relaxant et finition élégante</p>
-        <p><em>À partir de 35 €</em></p>
-        <a href="booking.html?service=Pédicure"><button class="book-button">Réserver</button></a>
+
+      <div class="hero-image-wrapper">
+        <img src="images/photo1.jpg" alt="Studio" class="hero-image">
+        <div class="hero-tag">Rendez-vous sur mesure</div>
       </div>
-    </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+      <h2 class="section-title">Prestations</h2>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <img src="images/Copilot_20250616_231053.png" alt="Manucure" class="service-img">
+          <div class="service-name">Manucure</div>
+          <p class="service-desc">Finitions impeccables, lignes épurées, brillance haute couture.</p>
+          <p class="service-price">À partir de 25 €</p>
+          <a href="booking.html?service=Manucure">
+            <button class="book-button">Réserver</button>
+          </a>
+        </div>
+
+        <div class="service-card">
+          <img src="images/Copilot_20250612_230729.png" alt="Cils" class="service-img">
+          <div class="service-name">Extensions de cils</div>
+          <p class="service-desc">Un regard couture, subtil et sophistiqué.</p>
+          <p class="service-price">À partir de 50 €</p>
+          <a href="booking.html?service=Extensions%20de%20cils">
+            <button class="book-button">Réserver</button>
+          </a>
+        </div>
+
+        <div class="service-card">
+          <img src="images/Copilot_20250614_115412.png" alt="Pédicure" class="service-img">
+          <div class="service-name">Pédicure</div>
+          <p class="service-desc">Soin précis, confort absolu, allure raffinée.</p>
+          <p class="service-price">À partir de 35 €</p>
+          <a href="booking.html?service=Pédicure">
+            <button class="book-button">Réserver</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERIE -->
+    <section class="section">
+      <h2 class="section-title">Galerie</h2>
+
+      <div class="carousel-wrapper">
+        <div id="carousel">
+          <img src="images/photo1.jpg" class="carousel-img" alt="Travail 1">
+          <img src="images/photo2.jpg" class="carousel-img" alt="Travail 2">
+          <img src="images/photo3.jpg" class="carousel-img" alt="Travail 3">
+        </div>
+
+        <button class="carousel-btn left" onclick="slide(-1)">❮</button>
+        <button class="carousel-btn right" onclick="slide(1)">❯</button>
+      </div>
+    </section>
+
+    <!-- AVIS -->
+    <section class="section">
+      <h2 class="section-title">Avis</h2>
+      <div id="avis-container" class="avis-grid"></div>
+    </section>
+
+    <!-- FORMULAIRE AVIS -->
+    <section class="section">
+      <h2 class="section-title">Laisser un avis</h2>
+
+      <form id="review-form" class="review-form">
+        <input type="text" name="name" placeholder="Votre prénom" required>
+        <select name="note" required>
+          <option value="">Note</option>
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="1">★☆☆☆☆</option>
+        </select>
+        <textarea name="comment" placeholder="Votre avis..." required></textarea>
+        <button type="submit">Envoyer</button>
+      </form>
+
+      <p id="review-msg" style="text-align:center; margin-top:10px;"></p>
+    </section>
   </main>
 
-  <!-- Galerie -->
-  <section style="padding: 40px; text-align: center;">
-    <h2>Galerie</h2>
-    <div style="position: relative; max-width: 400px; margin: auto; overflow: hidden; border-radius: 10px;">
-      <div id="carousel" style="display: flex; transition: transform 0.5s ease;">
-        <img src="images/photo1.jpg" alt="Travail 1" style="min-width: 100%; height: 250px; object-fit: cover; border-radius: 10px;">
-        <img src="images/photo2.jpg" alt="Travail 2" style="min-width: 100%; height: 250px; object-fit: cover; border-radius: 10px;">
-        <img src="images/photo3.jpg" alt="Travail 3" style="min-width: 100%; height: 250px; object-fit: cover; border-radius: 10px;">
-      </div>
-      <button onclick="slide(-1)" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);
-        background: rgba(0,0,0,0.4); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer;">❮</button>
-      <button onclick="slide(1)" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
-        background: rgba(0,0,0,0.4); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer;">❯</button>
-    </div>
-  </section>
+  <!-- FOOTER -->
+  <footer class="footer">
+    © Beauty Studio — Inspiré par les maisons de haute couture
+  </footer>
 
-   <!-- Avis clients -->
-   <section style="padding: 40px; background-color: #fffafc;">
-    <h2 style="text-align: center;">Ce que disent nos clientes</h2>
-    <div id="avis-container" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 20px;"></div>
-  </section>
+</div>
 
-  <!-- Formulaire d’avis -->
-  <section style="padding: 40px; background-color: #fff8f9;">
-    <h2>💬 Laissez votre avis</h2>
-    <form id="review-form" style="max-width: 500px; margin: auto;">
-      <input type="text" name="name" placeholder="Votre prénom" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
-      <label for="note">Note :</label>
-      <select name="note" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
-        <option value="">Sélectionnez une note</option>
-        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-        <option value="4">⭐️⭐️⭐️⭐️</option>
-        <option value="3">⭐️⭐️⭐️</option>
-        <option value="2">⭐️⭐️</option>
-        <option value="1">⭐️</option>
-      </select>
-      <textarea name="comment" placeholder="Votre avis..." required style="width: 100%; padding: 10px; margin-bottom: 10px;"></textarea>
-      <button type="submit" style="background-color: #c2185b; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Envoyer</button>
-    </form>
-    <p id="review-msg" style="text-align: center; margin-top: 15px;"></p>
-  </section>
+<!-- SCRIPTS -->
+<script>
+  // CAROUSEL
+  let currentIndex = 0;
+  function slide(direction) {
+    const carousel = document.getElementById('carousel');
+    const total = carousel.children.length;
+    currentIndex = (currentIndex + direction + total) % total;
+    carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
 
-  <!-- Scripts -->
-  <script>
-    function verifierCodeAdmin() {
-      const code = document.getElementById('admin-code').value.trim();
-      if (code === 'beauty123') {
-        window.location.href = '/admin/dashboard';
-      } else {
-        alert("Code incorrect !");
+  // AVIS
+  fetch('/api/reviews')
+    .then(res => res.json())
+    .then(avis => {
+      const container = document.getElementById('avis-container');
+
+      if (!avis.length) {
+        container.innerHTML = '<p style="color:#777;">Aucun avis pour le moment.</p>';
+        return;
       }
-    }
 
-    // 🔁 Charger les avis
-    fetch('/api/reviews')
-      .then(res => res.json())
-      .then(avis => {
-        const container = document.getElementById('avis-container');
-        if (avis.length === 0) {
-          container.innerHTML = '<p style="text-align:center; color: #888;">Aucun avis pour le moment.</p>';
-        } else {
-          avis.slice().reverse().forEach(a => {
-            const card = document.createElement('div');
-            card.style = "width:300px; background:#fce4ec; padding:20px; border-radius:10px;";
-            card.innerHTML = `
-              <p>💬 "${a.comment}"</p>
-              <p style="margin:5px 0;">${"⭐️".repeat(Number(a.note) || 0)}</p>
-              <p style="text-align:right;">– ${a.name}</p>
-            `;
-            container.appendChild(card);
-          });
-        }
-      });
-
-    // ✅ Envoi du formulaire d’avis
-    document.getElementById('review-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        name: form.name.value,
-        note: form.note.value,
-        comment: form.comment.value
-      };
-
-      fetch('/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        document.getElementById('review-msg').textContent = msg;
-        form.reset();
-      })
-      .catch(() => {
-        document.getElementById('review-msg').textContent = "❌ Une erreur est survenue.";
+      avis.slice().reverse().forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'avis-card';
+        card.innerHTML = `
+          <p>“${a.comment}”</p>
+          <p class="avis-note">${"★".repeat(Number(a.note) || 0)}</p>
+          <p style="text-align:right;">– ${a.name}</p>
+        `;
+        container.appendChild(card);
       });
     });
+</script>
 
-    // 🎯 Script du carrousel d’images
-    let currentIndex = 0;
-    function slide(direction) {
-      const carousel = document.getElementById('carousel');
-      const total = carousel.children.length;
-      currentIndex = (currentIndex + direction + total) % total;
-      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-  </script>
 </body>
 </html>
